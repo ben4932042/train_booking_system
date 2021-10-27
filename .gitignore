@@ -1,0 +1,7 @@
+data
+__pycache__
+.DS_Store
+.env
+Pipfile.lock
+venv/
+*.swp
