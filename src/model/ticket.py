@@ -18,15 +18,15 @@ class TicketInfo:
     """
     order_id: str
     car_number: int
-    column_no: int
-    row_no: str
+    row_no: int
+    col_no: int
     def __post_init__(self):
         # vertify seat info
-        if self.car_number not in range(1, 11):
+        if self.car_number not in range(10):
             raise TypeError('unknown car number')
-        elif self.column_no not in range(1, 11):
+        elif self.col_no not in range(5):
             raise TypeError('unknown column number')
-        elif self.row_no not in ['A', 'B', 'C', 'D', 'E']:
+        elif self.row_no not in range(10):
             raise TypeError('unknown row number')
 
 @dataclass
