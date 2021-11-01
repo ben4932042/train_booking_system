@@ -2,32 +2,7 @@ import random
 from typing import List
 from typing import Callable
 from dataclasses import dataclass, field
-
-
-@dataclass
-class TicketInfo:
-    """
-    Seat Info:
-        car:
-            range: 1 - 10
-        row:
-            window seat: A, E
-            aisle seat: B, C, D
-        column:
-            range: 1 - 10
-    """
-    order_id: str
-    car_number: int
-    column_no: int
-    row_no: str
-    def __post_init__(self):
-        # vertify seat info
-        if self.car_number not in range(1, 11):
-            raise TypeError('unknown car number')
-        elif self.column_no not in range(1, 11):
-            raise TypeError('unknown column number')
-        elif self.row_no not in ['A', 'B', 'C', 'D', 'E']:
-            raise TypeError('unknown row number')
+from src.model.ticket import TicketInfo
 
 
 TicketOrderingStrategy = Callable[[str], List[TicketInfo]]
@@ -163,23 +138,4 @@ def four_ticket_business_level_random_seat_strategy(order_id: str) -> List[Ticke
                     TicketInfo(order_id, 1, row_index+1, col_dic[col_index+3])
                     ]
     return two_ticket_business_level_random_seat_strategy(order_id=order_id) + two_ticket_business_level_random_seat_strategy(order_id=order_id)
-
-
-if __name__ == "__main__":
-    seat_list_list = [
-         [1, 0, 1, 1, 1],
-         [1, 1, 1, 0, 1],
-         [1, 1, 0, 1, 1],
-         [1, 1, 1, 1, 1],
-         [0, 1, 1, 1, 1],
-         [1, 1, 1, 1, 0],
-         [1, 1, 1, 1, 1],
-         [1, 1, 1, 1, 1],
-         [1, 1, 1, 1, 1],
-         [1, 1, 1, 1, 1],
-    ]
-
-
-    tick = four_ticket_business_level_window_seat_strategy(order_id = '123456')
-    print(tick)
 
