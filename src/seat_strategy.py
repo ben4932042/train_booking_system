@@ -6,7 +6,7 @@ from src.model.ticket import TicketInfo
 
 seat_list_list = [[1 for i in range(5)] for j in range(10)]
 
-TicketOrderingStrategy = Callable[[str], List[TicketInfo]]
+TicketOrderingStrategy = Callable[[List[TicketInfo]], List[TicketInfo]]
 
 #col_dic = {
 #    0:'A',
@@ -25,38 +25,49 @@ def check_have_seats(seat_list: list) -> bool:
     return check
 
 #one ticket
-def one_ticket_level_random_seat_strategy(order_id: str) -> List[TicketInfo]:
+def one_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for row_index, row in enumerate(seat_list_list):
         for col_index, col in enumerate(row):
             if col:
                 seat_list_list[row_index][col_index] = 0
-                return [TicketInfo(order_id, 1, row_index, col_index)]
+                ticket = tickets[0]
+                ticket.row_no = row_index
+                ticket.col_no = col_index
+                return [ticket]
     raise Exception("No seat availble.")
 
-def one_ticket_level_window_seat_strategy(order_id: str) -> List[TicketInfo]:
+def one_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for col_index in [0, 4]:
         for row_index in range(10):
             first_seat = seat_list_list[row_index][col_index]
             if first_seat:
                 seat_list_list[row_index][col_index] = 0
-                return [TicketInfo(order_id, 1, row_index, col_index)]
+                ticket = tickets[0]
+                ticket.row_no = row_index
+                ticket.col_no = col_index
+                return [ticket]
             
-    return one_ticket_level_random_seat_strategy(order_id)
+    return one_ticket_level_random_seat_strategy(tickets)
 
-def one_ticket_level_aisle_seat_strategy(order_id: str) -> List[TicketInfo]:
+def one_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for row_index in range(10):
         for col_index in range(1, 4):
             first_seat = seat_list_list[row_index][col_index]
             if first_seat:
                 seat_list_list[row_index][col_index] = 0
-                return [TicketInfo(order_id, 1, row_index, col_index)]
-    return one_ticket_level_random_seat_strategy(order_id)
+
+                ticket = tickets[0]                      
+                ticket.row_no = row_index            
+                ticket.col_no = col_index
+                return [ticket]
+
+    return one_ticket_level_random_seat_strategy(tickets)
 
 
-def two_ticket_level_random_seat_strategy(order_id: str) -> List[TicketInfo]:
+def two_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for row_index in range(10):
         for col_index in range(4):
@@ -64,14 +75,17 @@ def two_ticket_level_random_seat_strategy(order_id: str) -> List[TicketInfo]:
             if check_have_seats(first_seat):
                 seat_list_list[row_index][col_index] = 0
                 seat_list_list[row_index][col_index+1] = 0
-                return [
-                    TicketInfo(order_id, 1, row_index, col_index),
-                    TicketInfo(order_id, 1, row_index, col_index+1)
-                ]
+                result_ticket_list = []
+                for revise_no, ticket in enumerate(tickets):
+                    ticket.row_no = row_index
+                    ticket.col_no = col_index+revise_no
+                    result_ticket_list.append(ticket)
 
-    return one_ticket_level_random_seat_strategy(order_id) + one_ticket_level_random_seat_strategy(order_id)
+                return result_ticket_list
 
-def two_ticket_level_window_seat_strategy(order_id: str) -> List[TicketInfo]:
+    return one_ticket_level_random_seat_strategy([tickets[0]]) + one_ticket_level_random_seat_strategy([tickets[1]])
+
+def two_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for col_index in [0, 3]:
         for row_index in range(10):
@@ -79,14 +93,17 @@ def two_ticket_level_window_seat_strategy(order_id: str) -> List[TicketInfo]:
             if check_have_seats(first_seat):
                 seat_list_list[row_index][col_index] = 0
                 seat_list_list[row_index][col_index+1] = 0
-                return [
-                    TicketInfo(order_id, 1, row_index, col_index),
-                    TicketInfo(order_id, 1, row_index, col_index+1)
-                ]
-            
-    return two_ticket_level_random_seat_strategy(order_id)
+                result_ticket_list = []
+                for revise_no, ticket in enumerate(tickets):
+                    ticket.row_no = row_index
+                    ticket.col_no = col_index+revise_no
+                    result_ticket_list.append(ticket)
 
-def two_ticket_level_aisle_seat_strategy(order_id: str) -> List[TicketInfo]:
+                return result_ticket_list
+            
+    return two_ticket_level_random_seat_strategy(tickets)
+
+def two_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for row_index in range(10):
         for col_index in [1, 2]:
@@ -96,13 +113,17 @@ def two_ticket_level_aisle_seat_strategy(order_id: str) -> List[TicketInfo]:
             if check_have_seats(first_seat):
                 seat_list_list[row_index][col_index] = 0
                 seat_list_list[row_index][col_index+1] = 0
-                return [
-                    TicketInfo(order_id, 1, row_index, col_index),
-                    TicketInfo(order_id, 1, row_index, col_index+1)
-                ]
-    return two_ticket_level_random_seat_strategy(order_id)    
+                result_ticket_list = []
+                for revise_no, ticket in enumerate(tickets):
+                    ticket.row_no = row_index
+                    ticket.col_no = col_index+revise_no
+                    result_ticket_list.append(ticket)
 
-def three_ticket_level_random_seat_strategy(order_id: str) -> List[TicketInfo]:
+                return result_ticket_list
+
+    return two_ticket_level_random_seat_strategy(tickets) 
+
+def three_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for row_index in range(10):
         for col_index in range(3):
@@ -111,15 +132,18 @@ def three_ticket_level_random_seat_strategy(order_id: str) -> List[TicketInfo]:
                 seat_list_list[row_index][col_index] = 0
                 seat_list_list[row_index][col_index+1] = 0
                 seat_list_list[row_index][col_index+2] = 0
-                return [
-                        TicketInfo(order_id, 1, row_index, col_index),
-                        TicketInfo(order_id, 1, row_index, col_index+1),
-                        TicketInfo(order_id, 1, row_index, col_index+2)
-                        ]
 
-    return two_ticket_level_random_seat_strategy(order_id) + one_ticket_level_random_seat_strategy(order_id)
+                result_ticket_list = []
+                for revise_no, ticket in enumerate(tickets):
+                    ticket.row_no = row_index
+                    ticket.col_no = col_index+revise_no
+                    result_ticket_list.append(ticket)
 
-def four_ticket_level_random_seat_strategy(order_id: str) -> List[TicketInfo]:
+                return result_ticket_list
+
+    return two_ticket_level_random_seat_strategy(tickets[:2]) + one_ticket_level_random_seat_strategy(tickets[2:])
+
+def four_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
     global seat_list_list
     for row_index in range(10):
         for col_index in range(2):
@@ -129,11 +153,14 @@ def four_ticket_level_random_seat_strategy(order_id: str) -> List[TicketInfo]:
                 seat_list_list[row_index][col_index+1] = 0
                 seat_list_list[row_index][col_index+2] = 0
                 seat_list_list[row_index][col_index+3] = 0
-                return [
-                    TicketInfo(order_id, 1, row_index, col_index),
-                    TicketInfo(order_id, 1, row_index, col_index+1),
-                    TicketInfo(order_id, 1, row_index, col_index+2),
-                    TicketInfo(order_id, 1, row_index, col_index+3)
-                    ]
-    return two_ticket_level_random_seat_strategy(order_id) + two_ticket_level_random_seat_strategy(order_id)
+
+                result_ticket_list = []
+                for revise_no, ticket in enumerate(tickets):
+                    ticket.row_no = row_index
+                    ticket.col_no = col_index+revise_no
+                    result_ticket_list.append(ticket)
+
+                return result_ticket_list
+
+    return two_ticket_level_random_seat_strategy(tickets[:2]) + two_ticket_level_random_seat_strategy(tickets[2:])
 

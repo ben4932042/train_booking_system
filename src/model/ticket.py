@@ -16,18 +16,21 @@ class TicketInfo:
         column:
             range: 1 - 10
     """
-    order_id: str
-    car_number: int
-    row_no: int
-    col_no: int
-    def __post_init__(self):
+    order_id: str = None
+    car_number: int = None
+    row_no: int = None
+    col_no: int = None
+    def vertify(self):
         # vertify seat info
-        if self.car_number not in range(10):
-            raise TypeError('unknown car number')
-        elif self.col_no not in range(5):
-            raise TypeError('unknown column number')
-        elif self.row_no not in range(10):
-            raise TypeError('unknown row number')
+        try:
+            if self.car_number not in range(10):
+                raise TypeError('unknown car number')
+            elif not self.col_no and self.col_no not in range(5):
+                raise TypeError('unknown column number')
+            elif not self.row_no and self.row_no not in range(10):
+                raise TypeError('unknown row number')
+        except AttributeError:
+            pass
 
 @dataclass
 class TrainTicketOrder:
