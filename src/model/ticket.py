@@ -16,11 +16,11 @@ class TicketInfo:
         column:
             range: 1 - 10
     """
-    order_id: str = 'test'
-    car_number: int = field(init=False)
-    row_no: int = field(init=False)
-    col_no: int = field(init=False)
-    def __post_init__(self):
+    order_id: str = None
+    car_number: int = None
+    row_no: int = None
+    col_no: int = None
+    def vertify(self):
         # vertify seat info
         try:
             if self.car_number not in range(10):
