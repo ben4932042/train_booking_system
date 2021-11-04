@@ -7,7 +7,18 @@ def cabin_strategy(
         tickets: List[TicketInfo],
         all_seat_list_list: List[list]
         )-> List[TicketInfo]:
+    """[summary]
 
+    Args:
+        tickets (List[TicketInfo]): initial ticket list.
+        all_seat_list_list (List[list]): initial seats.
+
+    Raises:
+        Exception: None
+
+    Returns:
+        List[TicketInfo]: ticket info with car no.
+    """
     ticket_number = len(tickets)
     
     cabin_seat = [sum([sum(row) for row in singal_cabin]) for singal_cabin in all_seat_list_list[0:3]]
@@ -35,7 +46,18 @@ def economy_cabin_strategy(
         tickets: List[TicketInfo],
         all_seat_list_list: List[list]
         ) -> List[TicketInfo]:
+    """[summary]
 
+    Args:
+        tickets (List[TicketInfo]): initial ticket list.
+        all_seat_list_list (List[list]): initial seats.
+
+    Raises:
+        Exception: None
+
+    Returns:
+        List[TicketInfo]: ticket info with car no.
+    """
     ticket_number = len(tickets)
     
     cabin_seat = [sum([sum(row) for row in singal_cabin]) for singal_cabin in all_seat_list_list[3:]]

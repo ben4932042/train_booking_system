@@ -6,15 +6,14 @@ from dataclasses import dataclass, field
 
 @dataclass
 class TicketInfo:
-    """
-    Seat Info:
-        car:
-            range: 1 - 10
-        row:
-            window seat: A, E
-            aisle seat: B, C, D
-        column:
-            range: 1 - 10
+    """Seat Info:
+    car:
+        range: 1 - 10
+    row:
+        window seat: A, E
+        aisle seat: B, C, D
+    column:
+        range: 1 - 10
     """
     car_number: int = None
     row_no: int = None
@@ -30,6 +29,12 @@ class TicketInfo:
 
 @dataclass
 class TicketsOder:
+    """[summary]
+
+    Raises:
+        ValueError: lost user id  or too many tickets.
+        TypeError: invalid ticket object type.
+    """
     uuid: str = None
     tickets: List[TicketInfo] = None
     traun_no: int = '9487'

@@ -17,6 +17,14 @@ TicketOrderingStrategy = Callable[[List[TicketInfo]], List[TicketInfo]]
 #}
 
 def check_have_seats(seat_list: list) -> bool:
+    """[summary]
+
+    Args:
+        seat_list (list): check have any seats in required car no.
+
+    Returns:
+        bool: have any seat or not
+    """
     check = True
     for i in seat_list:
         if i == 0:
@@ -26,6 +34,17 @@ def check_have_seats(seat_list: list) -> bool:
 
 #one ticket
 def one_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for row_index, row in enumerate(seat_list_list):
         for col_index, col in enumerate(row):
@@ -38,6 +57,17 @@ def one_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[Tic
     raise Exception("No seat availble.")
 
 def one_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for col_index in [0, 4]:
         for row_index in range(10):
@@ -52,6 +82,17 @@ def one_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[Tic
     return one_ticket_level_random_seat_strategy(tickets)
 
 def one_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for row_index in range(10):
         for col_index in range(1, 4):
@@ -68,6 +109,17 @@ def one_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[Tick
 
 
 def two_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for row_index in range(10):
         for col_index in range(4):
@@ -86,6 +138,17 @@ def two_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[Tic
     return one_ticket_level_random_seat_strategy([tickets[0]]) + one_ticket_level_random_seat_strategy([tickets[1]])
 
 def two_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for col_index in [0, 3]:
         for row_index in range(10):
@@ -104,6 +167,17 @@ def two_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[Tic
     return two_ticket_level_random_seat_strategy(tickets)
 
 def two_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for row_index in range(10):
         for col_index in [1, 2]:
@@ -124,6 +198,17 @@ def two_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[Tick
     return two_ticket_level_random_seat_strategy(tickets) 
 
 def three_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for row_index in range(10):
         for col_index in range(3):
@@ -144,6 +229,17 @@ def three_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[T
     return two_ticket_level_random_seat_strategy(tickets[:2]) + one_ticket_level_random_seat_strategy(tickets[2:])
 
 def four_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
+    """[summary]
+
+    Args:
+        tickets (List[TicketInfo]): ticket info with car no
+
+    Raises:
+        Exception: No seat availble.
+
+    Returns:
+        List[TicketInfo]: fully ticket info with row no and col no.
+    """
     global seat_list_list
     for row_index in range(10):
         for col_index in range(2):
