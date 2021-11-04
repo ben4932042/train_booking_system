@@ -3,8 +3,11 @@ from src.model.ticket import TicketInfo
 
 all_seat_list_list = [ [[1 for col in range(5)] for row in range(10)] for cabin in range(10)]
 
-def business_cabin_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    global all_seat_list_list
+def cabin_strategy(
+        tickets: List[TicketInfo],
+        all_seat_list_list: List[list]
+        )-> List[TicketInfo]:
+
     ticket_number = len(tickets)
     
     cabin_seat = [sum([sum(row) for row in singal_cabin]) for singal_cabin in all_seat_list_list[0:3]]
@@ -28,8 +31,11 @@ def business_cabin_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
 
     return return_ticket_list
     
-def economy_cabin_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    global all_seat_list_list
+def economy_cabin_strategy(
+        tickets: List[TicketInfo],
+        all_seat_list_list: List[list]
+        ) -> List[TicketInfo]:
+
     ticket_number = len(tickets)
     
     cabin_seat = [sum([sum(row) for row in singal_cabin]) for singal_cabin in all_seat_list_list[3:]]
