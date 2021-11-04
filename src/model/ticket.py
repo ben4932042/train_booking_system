@@ -16,7 +16,6 @@ class TicketInfo:
         column:
             range: 1 - 10
     """
-    order_id: str = None
     car_number: int = None
     row_no: int = None
     col_no: int = None

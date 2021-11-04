@@ -19,7 +19,7 @@ def test_one_ticket_level_random_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1)]
+    input_ticket_list = [TicketInfo(car_number=1)]
     for row_no in range(10):
         for col_no in range(5):
             ticket_list = one_ticket_level_random_seat_strategy(input_ticket_list)
@@ -42,7 +42,7 @@ def test_one_ticket_level_window_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1)]
+    input_ticket_list = [TicketInfo(car_number=1)]
     for row_no in range(10):
         ticket_list = one_ticket_level_window_seat_strategy(input_ticket_list)
         for col_no, ticket in enumerate(ticket_list):
@@ -69,7 +69,7 @@ def test_one_ticket_level_aisle_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1)]
+    input_ticket_list = [TicketInfo(car_number=1)]
     for row_no in range(10):
         for col_no in [1, 2, 3]:
             print(col_no)
@@ -94,7 +94,7 @@ def test_two_ticket_level_random_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1) for _ in range(2)]
+    input_ticket_list = [TicketInfo(car_number=1) for _ in range(2)]
     for row_no in range(10):
         for col_no in [0, 2]:
             ticket_list = two_ticket_level_random_seat_strategy(input_ticket_list)
@@ -116,7 +116,7 @@ def test_two_ticket_level_window_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1) for _ in range(2)]
+    input_ticket_list = [TicketInfo(car_number=1) for _ in range(2)]
     for col_no in [0, 3]:
         for row_no in range(10):
             ticket_list = two_ticket_level_window_seat_strategy(input_ticket_list)
@@ -139,7 +139,7 @@ def test_two_ticket_level_aisle_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1) for _ in range(2)]
+    input_ticket_list = [TicketInfo(car_number=1) for _ in range(2)]
     col_no = 1
     for row_no in range(10):
         ticket_list = two_ticket_level_aisle_seat_strategy(input_ticket_list)
@@ -163,7 +163,7 @@ def test_three_ticket_level_random_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1) for _ in range(3)]
+    input_ticket_list = [TicketInfo(car_number=1) for _ in range(3)]
     col_no = 0
     for row_no in range(10):
         ticket_list = three_ticket_level_random_seat_strategy(input_ticket_list)
@@ -187,7 +187,7 @@ def test_four_ticket_level_random_seat_strategy(monkeypatch):
             'src.seat_strategy.seat_list_list',
             [[1 for i in range(5)] for j in range(10)],
             )
-    input_ticket_list = [TicketInfo(order_id='', car_number=1) for _ in range(4)]
+    input_ticket_list = [TicketInfo(car_number=1) for _ in range(4)]
     col_no = 0
     for row_no in range(10):
         ticket_list = four_ticket_level_random_seat_strategy(input_ticket_list)
