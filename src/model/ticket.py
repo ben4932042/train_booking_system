@@ -1,7 +1,5 @@
-import random
 from typing import List
-from typing import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
@@ -37,7 +35,7 @@ class TicketsOder:
     """
     uuid: str = None
     tickets: List[TicketInfo] = None
-    traun_no: int = '9487'
+    train_no: int = '9487'
     departure_station: str = 'departure_station'
     arrival_station: str = 'arrival_station'
 
@@ -60,4 +58,3 @@ class TicketsOder:
                 ticket.vertify()
         except TypeError as err_msg:
             raise TypeError("Vertify ticket error") from err_msg
-            

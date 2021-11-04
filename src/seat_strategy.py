@@ -1,8 +1,6 @@
-import random
-from typing import List
-from typing import Callable
-from src.model.ticket import TicketInfo
+from typing import Callable, List
 
+from src.model.ticket import TicketInfo
 
 seat_list_list = [[1 for i in range(5)] for j in range(10)]
 

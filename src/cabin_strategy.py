@@ -1,4 +1,5 @@
 from typing import List
+
 from src.model.ticket import TicketInfo
 
 all_seat_list_list = [ [[1 for col in range(5)] for row in range(10)] for cabin in range(10)]
