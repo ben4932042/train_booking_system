@@ -21,25 +21,38 @@ class TicketInfo:
     col_no: int = None
     def vertify(self):
         # vertify seat info
-        try:
-            if self.car_number not in range(10):
-                raise TypeError('unknown car number')
-            elif not self.col_no and self.col_no not in range(5):
-                raise TypeError('unknown column number')
-            elif not self.row_no and self.row_no not in range(10):
-                raise TypeError('unknown row number')
-        except AttributeError:
-            pass
+        if self.car_number not in range(10):
+            raise TypeError('unknown car number')
+        elif not self.col_no and self.col_no not in range(5):
+            raise TypeError('unknown column number')
+        elif not self.row_no and self.row_no not in range(10):
+            raise TypeError('unknown row number')
 
 @dataclass
-class TrainTicketOrder:
-    customer: str = 'Ben'
-    id: str = ''
+class TicketsOder:
+    uuid: str = None
+    tickets: List[TicketInfo] = None
+    traun_no: int = '9487'
     departure_station: str = 'departure_station'
     arrival_station: str = 'arrival_station'
-    train_num: int = '9487'
 
     def status(self):
-        print(f"train number: {self.train_num}")
-        print(f"order id: {self.id}")
-        print(f"customer name: {self.customer}")
+        print(f"train number: {self.train_no}")
+        print(f"user id: {self.uuid}")
+
+    def vertify(self):
+        if not self.uuid:
+            raise ValueError("Lost user id")
+
+        if not all(isinstance(ticket, TicketInfo) for ticket in self.tickets):
+            raise TypeError("Get invalid ticket.")
+
+        if len(self.tickets) > 4:
+            raise ValueError("Get too many tickets")
+
+        try:
+            for ticket in self.tickets:
+                ticket.vertify()
+        except TypeError as err_msg:
+            raise TypeError("Vertify ticket error") from err_msg
+            
