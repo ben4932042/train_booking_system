@@ -1,53 +1,54 @@
 import pytest
 
-from src.cabin_strategy import business_cabin_strategy
-from src.cabin_strategy import economy_cabin_strategy
+from src.model.cabin_info import *
 from src.model.ticket import TicketInfo
+from src.cabin_strategy import CabinStrategy
 
 def test_business_cabin_strategy():
-    all_seat_list_list = [[[1 for col in range(5)] for row in range(10)] for cabin in range(10)]
+    car_type = 0
+    number_of_seats_dict = {f'car_{cabin}': CabinInfo.number_of_cabin_col * CabinInfo.number_of_cabin_row for cabin in range(CabinInfo.number_of_cabin)}
     
     for i in range(4):
         input_ticket_list = [TicketInfo() for _ in range(i+1)]
-        ticket_list = business_cabin_strategy(input_ticket_list, all_seat_list_list)
-        for ticket in ticket_list:
+        cabin_strategy = CabinStrategy(car_type, input_ticket_list, number_of_seats_dict)
+        for ticket in cabin_strategy.tickets:
             assert ticket.car_number == 0
     
     with pytest.raises(Exception, match=r".* seat .*"):
         input_ticket_list = [TicketInfo() for _ in range(200)]
-        assert business_cabin_strategy(input_ticket_list, all_seat_list_list)
+        assert CabinStrategy(car_type, input_ticket_list, number_of_seats_dict)
 
-    all_seat_list_list[0] = [[0 for col in range(5)] for row in range(10)]
+    number_of_seats_dict['car_0'] = 0
     for i in range(4):
         input_ticket_list = [TicketInfo() for _ in range(i+1)]
-        ticket_list = business_cabin_strategy(input_ticket_list, all_seat_list_list)
-        for ticket in ticket_list:
+        cabin_strategy = CabinStrategy(car_type, input_ticket_list, number_of_seats_dict)
+        for ticket in cabin_strategy.tickets:
             assert ticket.car_number == 1
 
-    all_seat_list_list[1] = [[0 for col in range(5)] for row in range(10)]
-
+    number_of_seats_dict['car_1'] = 0
     for i in range(4):
         input_ticket_list = [TicketInfo() for _ in range(i+1)]
-        ticket_list = business_cabin_strategy(input_ticket_list, all_seat_list_list)
-        for ticket in ticket_list:
+        cabin_strategy = CabinStrategy(car_type, input_ticket_list, number_of_seats_dict)
+        for ticket in cabin_strategy.tickets:
             assert ticket.car_number == 2
 
-    all_seat_list_list[2] = [[0 for col in range(5)] for row in range(10)]
+    number_of_seats_dict['car_2'] = 0
     for i in range(4):
         input_ticket_list = [TicketInfo() for _ in range(i+1)]
         with pytest.raises(Exception, match=r".* seat .*"):
-            business_cabin_strategy(input_ticket_list, all_seat_list_list)
+            CabinStrategy(car_type, input_ticket_list, number_of_seats_dict)
 
 
 def test_economy_cabin_strategy():
-    all_seat_list_list = [[[1 for col in range(5)] for row in range(10)] for cabin in range(10)]
+    car_type = 1
+    number_of_seats_dict = {f'car_{cabin}': CabinInfo.number_of_cabin_col * CabinInfo.number_of_cabin_row for cabin in range(CabinInfo.number_of_cabin)}
     
     for i in range(4):
         input_ticket_list = [TicketInfo() for _ in range(i+1)]
-        ticket_list = economy_cabin_strategy(input_ticket_list, all_seat_list_list)
-        for ticket in ticket_list:
+        cabin_strategy = CabinStrategy(car_type, input_ticket_list, number_of_seats_dict)
+        for ticket in cabin_strategy.tickets:
             assert ticket.car_number == 3
 
     with pytest.raises(Exception, match=r".* seat .*"):
         input_ticket_list = [TicketInfo() for _ in range(400)]
-        assert economy_cabin_strategy(input_ticket_list, all_seat_list_list)
+        assert CabinStrategy(car_type, input_ticket_list, number_of_seats_dict)
