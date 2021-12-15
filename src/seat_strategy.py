@@ -3,17 +3,49 @@ from typing import Callable, List
 from src.model.ticket_info import TicketInfo
 from src.model.cabin_info import *
 
+
 class SeatStrategy:
     def __init__(self, seat_prefer: int, tickets: List[TicketInfo], cabin_seat_dict: dict) -> None:
+        """[summary]
+
+        Args:
+            seat_prefer (int): seat prefer type.
+                0 is level random seat strategy.
+                1 is level window seat strategy.
+                2 is level aisle seat strategy.
+
+            tickets (List[TicketInfo]): ticket info with car no.
+            cabin_seat_dict (dict): available seat no list of cabin.
+
+        Returns:
+            None
+
+        """
         self.tickets = tickets
         self.cabin_seat_dict = self.__transform_seat_list(self.__get_cabin_no_set(), cabin_seat_dict)
-        self.seat_strategy = self.__get_prefer_seat_strategy(seat_prefer, len(tickets))
-        self.seat_strategy(self.tickets)
+        seat_strategy = self.__get_prefer_seat_strategy(seat_prefer, len(tickets))
+        seat_strategy(self.tickets)
 
     def __get_cabin_no_set(self) -> set:
+        """[summary]
+
+        Returns:
+            set: car no of tickets.
+        """
         return {ticket.car_number for ticket in self.tickets}
 
     def __transform_seat_list(self, cabin_no_set: set, cabin_seat_dict) -> dict:
+        """[summary]
+
+        Args:
+            cabin_no_set (int): car no of tickets.
+            cabin_seat_dict (dict): available seat no list of cabin.
+
+        Returns:
+            dict: seat status list of cabin.
+
+        """
+
         default_seats_list = [0 for seat_no in range(CabinInfo.number_of_seats)]
         return_cabin_seat_dict = {}
         for cabin_no in cabin_no_set:
@@ -24,7 +56,17 @@ class SeatStrategy:
 
         return return_cabin_seat_dict
 
-    def __get_prefer_seat_strategy(self, seat_prefer: int, tickets_number: int):
+    def __get_prefer_seat_strategy(self, seat_prefer: int, tickets_number: int) -> object:
+        """[summary]
+
+        Args:
+            seat_prefer (int): seat prefer type.
+            tickets_number (int): number of ticket.
+
+        Returns:
+            object: seat strategy method
+
+        """
         if tickets_number == 4:
             number = 'four'
         elif tickets_number == 3:
@@ -51,6 +93,7 @@ class SeatStrategy:
 
         Returns:
             bool: have any seat or not
+
         """
         check = True
         if sum(seat_list) != len(seat_list):
@@ -62,13 +105,14 @@ class SeatStrategy:
         """[summary]
 
         Args:
-            tickets (List[TicketInfo]): ticket info with car no
+            tickets (List[TicketInfo]): ticket info with car no.
 
         Raises:
             Exception: No seat availble.
 
         Returns:
             None
+
         """
         for ticket in tickets:
             cabin_no = ticket.car_number
@@ -85,13 +129,11 @@ class SeatStrategy:
         """[summary]
 
         Args:
-            tickets (List[TicketInfo]): ticket info with car no
-
-        Raises:
-            Exception: No seat availble.
+            tickets (List[TicketInfo]): ticket info with car no.
 
         Returns:
             None
+
         """
         for ticket in tickets:
             cabin_no = ticket.car_number
@@ -110,11 +152,9 @@ class SeatStrategy:
         Args:
             tickets (List[TicketInfo]): ticket info with car no
 
-        Raises:
-            Exception: No seat availble.
-
         Returns:
             None
+
         """
         for ticket in tickets:
             cabin_no = ticket.car_number
@@ -131,13 +171,11 @@ class SeatStrategy:
         """[summary]
 
         Args:
-            tickets (List[TicketInfo]): ticket info with car no
-
-        Raises:
-            Exception: No seat availble.
+            tickets (List[TicketInfo]): ticket info with car no.
 
         Returns:
            None
+
         """
 
         if tickets[0].car_number == tickets[1].car_number:
@@ -159,13 +197,11 @@ class SeatStrategy:
         """[summary]
 
         Args:
-            tickets (List[TicketInfo]): ticket info with car no
-
-        Raises:
-            Exception: No seat availble.
+            tickets (List[TicketInfo]): ticket info with car no.
 
         Returns:
             None
+
         """
 
         if tickets[0].car_number == tickets[1].car_number:
@@ -186,13 +222,11 @@ class SeatStrategy:
         """[summary]
 
         Args:
-            tickets (List[TicketInfo]): ticket info with car no
-
-        Raises:
-            Exception: No seat availble.
+            tickets (List[TicketInfo]): ticket info with car no.
 
         Returns:
             None
+
         """
 
         if tickets[0].car_number == tickets[1].car_number:
@@ -215,10 +249,7 @@ class SeatStrategy:
         """[summary]
 
         Args:
-            tickets (List[TicketInfo]): ticket info with car no
-
-        Raises:
-            Exception: No seat availble.
+            tickets (List[TicketInfo]): ticket info with car no.
 
         Returns:
             None
@@ -246,9 +277,6 @@ class SeatStrategy:
 
         Args:
             tickets (List[TicketInfo]): ticket info with car no
-
-        Raises:
-            Exception: No seat availble.
 
         Returns:
             None

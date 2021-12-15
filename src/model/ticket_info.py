@@ -5,28 +5,28 @@ from dataclasses import dataclass
 @dataclass
 class TicketInfo:
     """Seat Info:
-    car:
-        range: 1 - 10
-    row:
-        window seat: A, E
-        aisle seat: B, C, D
-    column:
-        range: 1 - 10
+    car_number:
+        range: 0 - 9
+    seat_number:
+        range: 0 - 49
+
+    Raises:
+        ValueError: Unknown car number.
+        ValueError: Unknown seat number.
     """
     car_number: int = None
     seat_number: int = None
     
-    def vertify(self):
-        # vertify seat info
-        if self.car_number not in range(10):
-            raise TypeError('unknown car number')
-        elif not self.col_no and self.col_no not in range(5):
-            raise TypeError('unknown column number')
-        elif not self.row_no and self.row_no not in range(10):
-            raise TypeError('unknown row number')
+    def verify(self):
+        # verify seat info
+        if not self.seat_number and self.car_number not in range(10):
+            raise ValueError('Unknown car number.')
+        elif not self.seat_number and self.seat_number not in range(50):
+            raise ValueError('Unknown seat number.')
+
 
 @dataclass
-class TicketsOder:
+class TicketsOrder:
     """[summary]
 
     Raises:
@@ -43,7 +43,7 @@ class TicketsOder:
         print(f"train number: {self.train_no}")
         print(f"user id: {self.uuid}")
 
-    def vertify(self):
+    def verify(self):
         if not self.uuid:
             raise ValueError("Lost user id")
 
@@ -55,6 +55,6 @@ class TicketsOder:
 
         try:
             for ticket in self.tickets:
-                ticket.vertify()
+                ticket.verify()
         except TypeError as err_msg:
-            raise TypeError("Vertify ticket error") from err_msg
+            raise TypeError("Verify ticket error") from err_msg
