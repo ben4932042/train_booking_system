@@ -1,260 +1,273 @@
 from typing import Callable, List
 
-from src.model.ticket import TicketInfo
+from src.model.ticket_info import TicketInfo
+from src.model.cabin_info import *
 
-seat_list_list = [[1 for i in range(5)] for j in range(10)]
+class SeatStrategy:
+    def __init__(self, seat_prefer: int, tickets: List[TicketInfo], cabin_seat_dict: dict) -> None:
+        self.tickets = tickets
+        self.cabin_seat_dict = self.__transform_seat_list(self.__get_cabin_no_set(), cabin_seat_dict)
+        self.seat_strategy = self.__get_prefer_seat_strategy(seat_prefer, len(tickets))
+        self.seat_strategy(self.tickets)
 
-TicketOrderingStrategy = Callable[[List[TicketInfo]], List[TicketInfo]]
+    def __get_cabin_no_set(self) -> set:
+        return {ticket.car_number for ticket in self.tickets}
 
-#col_dic = {
-#    0:'A',
-#    1:'B',
-#    2:'C',
-#    3:'D',
-#    4:'E',
-#}
+    def __transform_seat_list(self, cabin_no_set: set, cabin_seat_dict) -> dict:
+        default_seats_list = [0 for seat_no in range(CabinInfo.number_of_seats)]
+        return_cabin_seat_dict = {}
+        for cabin_no in cabin_no_set:
+            seats_list = default_seats_list[:]
+            for seat_no in cabin_seat_dict[f'car_{cabin_no}']:
+                seats_list[seat_no] = 1
+            return_cabin_seat_dict[f'car_{cabin_no}'] = [seats_list[i:i + 5] for i in range(0, len(seats_list), 5)]
 
-def check_have_seats(seat_list: list) -> bool:
-    """[summary]
+        return return_cabin_seat_dict
 
-    Args:
-        seat_list (list): check have any seats in required car no.
+    def __get_prefer_seat_strategy(self, seat_prefer: int, tickets_number: int):
+        if tickets_number == 4:
+            number = 'four'
+        elif tickets_number == 3:
+            number = 'three'
+        elif tickets_number == 2:
+            number = 'two'
+        else:
+            number = 'one'
 
-    Returns:
-        bool: have any seat or not
-    """
-    check = True
-    for i in seat_list:
-        if i == 0:
+        if seat_prefer == 1:
+            prefer = 'window'
+        elif seat_prefer == 2:
+            prefer = 'aisle'
+        else:
+            prefer = 'random'
+
+        return eval(f'self.{number}_ticket_level_{prefer}_seat_strategy')
+
+    def __check_have_seats(self, seat_list: list) -> bool:
+        """[summary]
+
+        Args:
+            seat_list (list): check have any seats in required car no.
+
+        Returns:
+            bool: have any seat or not
+        """
+        check = True
+        if sum(seat_list) != len(seat_list):
             check = False
-            break
-    return check
+        return check
+        
+    #one ticket
+    def one_ticket_level_random_seat_strategy(self, tickets: List[TicketInfo]) -> None:
+        """[summary]
 
-#one ticket
-def one_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+        Raises:
+            Exception: No seat availble.
 
-    Raises:
-        Exception: No seat availble.
+        Returns:
+            None
+        """
+        for ticket in tickets:
+            cabin_no = ticket.car_number
+            for row_index, row in enumerate(self.cabin_seat_dict[f'car_{cabin_no}']):
+                for col_index, col in enumerate(row):
+                    if col:
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        ticket.seat_number = (row_index * 5) + col_index
+                        return
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for row_index, row in enumerate(seat_list_list):
-        for col_index, col in enumerate(row):
-            if col:
-                seat_list_list[row_index][col_index] = 0
-                ticket = tickets[0]
-                ticket.row_no = row_index
-                ticket.col_no = col_index
-                return [ticket]
-    raise Exception("No seat availble.")
+        raise Exception("No seat availble.")
 
-def one_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+    def one_ticket_level_window_seat_strategy(self, tickets: List[TicketInfo]) -> None:
+        """[summary]
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-    Raises:
-        Exception: No seat availble.
+        Raises:
+            Exception: No seat availble.
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for col_index in [0, 4]:
-        for row_index in range(10):
-            first_seat = seat_list_list[row_index][col_index]
-            if first_seat:
-                seat_list_list[row_index][col_index] = 0
-                ticket = tickets[0]
-                ticket.row_no = row_index
-                ticket.col_no = col_index
-                return [ticket]
-            
-    return one_ticket_level_random_seat_strategy(tickets)
+        Returns:
+            None
+        """
+        for ticket in tickets:
+            cabin_no = ticket.car_number
+            for col_index in [0, 4]:
+                for row_index in range(10):
+                    if self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index]:
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        ticket.seat_number = (row_index * 5) + col_index
+                        return
 
-def one_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+        self.one_ticket_level_random_seat_strategy(tickets)
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+    def one_ticket_level_aisle_seat_strategy(self, tickets: List[TicketInfo]) -> None:
+        """[summary]
 
-    Raises:
-        Exception: No seat availble.
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for row_index in range(10):
-        for col_index in range(1, 4):
-            first_seat = seat_list_list[row_index][col_index]
-            if first_seat:
-                seat_list_list[row_index][col_index] = 0
+        Raises:
+            Exception: No seat availble.
 
-                ticket = tickets[0]                      
-                ticket.row_no = row_index            
-                ticket.col_no = col_index
-                return [ticket]
+        Returns:
+            None
+        """
+        for ticket in tickets:
+            cabin_no = ticket.car_number
+            for row_index in range(10):
+                for col_index in range(1, 4):
+                    if self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index]:
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        ticket.seat_number = (row_index * 5) + col_index
+                        return
 
-    return one_ticket_level_random_seat_strategy(tickets)
+        self.one_ticket_level_random_seat_strategy(tickets)
 
+    def two_ticket_level_random_seat_strategy(self, tickets: List[TicketInfo]) -> None:
+        """[summary]
 
-def two_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+        Raises:
+            Exception: No seat availble.
 
-    Raises:
-        Exception: No seat availble.
+        Returns:
+           None
+        """
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for row_index in range(10):
-        for col_index in range(4):
-            first_seat = seat_list_list[row_index][col_index: col_index+2]
-            if check_have_seats(first_seat):
-                seat_list_list[row_index][col_index] = 0
-                seat_list_list[row_index][col_index+1] = 0
-                result_ticket_list = []
-                for revise_no, ticket in enumerate(tickets):
-                    ticket.row_no = row_index
-                    ticket.col_no = col_index+revise_no
-                    result_ticket_list.append(ticket)
+        if tickets[0].car_number == tickets[1].car_number:
+            cabin_no = tickets[0].car_number
+            for row_index in range(10):
+                for col_index in range(4):
+                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index:col_index + 2]
+                    if self.__check_have_seats(first_seat):
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = False
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 1] = False
+                        for revise_no, ticket in enumerate(tickets):
+                            ticket.seat_number = (row_index * 5) + (col_index + revise_no)
+                        return
 
-                return result_ticket_list
+        for ticket in tickets:
+            self.one_ticket_level_random_seat_strategy([ticket])
 
-    return one_ticket_level_random_seat_strategy([tickets[0]]) + one_ticket_level_random_seat_strategy([tickets[1]])
+    def two_ticket_level_window_seat_strategy(self, tickets: List[TicketInfo]) -> None:
+        """[summary]
 
-def two_ticket_level_window_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+        Raises:
+            Exception: No seat availble.
 
-    Raises:
-        Exception: No seat availble.
+        Returns:
+            None
+        """
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for col_index in [0, 3]:
-        for row_index in range(10):
-            first_seat = seat_list_list[row_index][col_index: col_index+2]
-            if check_have_seats(first_seat):
-                seat_list_list[row_index][col_index] = 0
-                seat_list_list[row_index][col_index+1] = 0
-                result_ticket_list = []
-                for revise_no, ticket in enumerate(tickets):
-                    ticket.row_no = row_index
-                    ticket.col_no = col_index+revise_no
-                    result_ticket_list.append(ticket)
+        if tickets[0].car_number == tickets[1].car_number:
+            cabin_no = tickets[0].car_number
+            for col_index in [0, 3]:
+                for row_index in range(10):
+                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index+2]
+                    if self.__check_have_seats(first_seat):
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
+                        for revise_no, ticket in enumerate(tickets):
+                            ticket.seat_number = (row_index * 5) + (col_index + revise_no)
+                        return
 
-                return result_ticket_list
-            
-    return two_ticket_level_random_seat_strategy(tickets)
+        self.two_ticket_level_random_seat_strategy(tickets)
 
-def two_ticket_level_aisle_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+    def two_ticket_level_aisle_seat_strategy(self, tickets: List[TicketInfo]) -> None:
+        """[summary]
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-    Raises:
-        Exception: No seat availble.
+        Raises:
+            Exception: No seat availble.
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for row_index in range(10):
-        for col_index in [1, 2]:
-            first_seat = seat_list_list[row_index][col_index: col_index+2]
-            if first_seat[1] == 0:
-                break
-            if check_have_seats(first_seat):
-                seat_list_list[row_index][col_index] = 0
-                seat_list_list[row_index][col_index+1] = 0
-                result_ticket_list = []
-                for revise_no, ticket in enumerate(tickets):
-                    ticket.row_no = row_index
-                    ticket.col_no = col_index+revise_no
-                    result_ticket_list.append(ticket)
+        Returns:
+            None
+        """
 
-                return result_ticket_list
+        if tickets[0].car_number == tickets[1].car_number:
+            cabin_no = tickets[0].car_number
+            for row_index in range(10):
+                for col_index in [1, 2]:
+                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index + 2]
+                    if first_seat[1] == 0:
+                        break
+                    if self.__check_have_seats(first_seat):
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
+                        for revise_no, ticket in enumerate(tickets):
+                            ticket.seat_number = (row_index * 5) + (col_index + revise_no)
+                        return
 
-    return two_ticket_level_random_seat_strategy(tickets) 
+        self.two_ticket_level_random_seat_strategy(tickets)
 
-def three_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+    def three_ticket_level_random_seat_strategy(self, tickets: List[TicketInfo]) -> None:
+        """[summary]
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-    Raises:
-        Exception: No seat availble.
+        Raises:
+            Exception: No seat availble.
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for row_index in range(10):
-        for col_index in range(3):
-            first_seat = seat_list_list[row_index][col_index: col_index+3]
-            if check_have_seats(first_seat):
-                seat_list_list[row_index][col_index] = 0
-                seat_list_list[row_index][col_index+1] = 0
-                seat_list_list[row_index][col_index+2] = 0
+        Returns:
+            None
+        """
+        if tickets[0].car_number == tickets[1].car_number == tickets[2].car_number:
+            cabin_no = tickets[0].car_number
+            for row_index in range(10):
+                for col_index in range(3):
+                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index + 3]
+                    if first_seat[1] == 0:
+                        break
+                    if self.__check_have_seats(first_seat):
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+2] = 0
+                        for revise_no, ticket in enumerate(tickets):
+                            ticket.seat_number = (row_index * 5) + (col_index + revise_no)
+                        return
 
-                result_ticket_list = []
-                for revise_no, ticket in enumerate(tickets):
-                    ticket.row_no = row_index
-                    ticket.col_no = col_index+revise_no
-                    result_ticket_list.append(ticket)
+        self.two_ticket_level_random_seat_strategy(tickets[:2])
+        self.one_ticket_level_random_seat_strategy(tickets[2:])
 
-                return result_ticket_list
+    def four_ticket_level_random_seat_strategy(self, tickets: List[TicketInfo]) -> List[TicketInfo]:
+        """[summary]
 
-    return two_ticket_level_random_seat_strategy(tickets[:2]) + one_ticket_level_random_seat_strategy(tickets[2:])
+        Args:
+            tickets (List[TicketInfo]): ticket info with car no
 
-def four_ticket_level_random_seat_strategy(tickets: List[TicketInfo]) -> List[TicketInfo]:
-    """[summary]
+        Raises:
+            Exception: No seat availble.
 
-    Args:
-        tickets (List[TicketInfo]): ticket info with car no
+        Returns:
+            None
+        """
 
-    Raises:
-        Exception: No seat availble.
+        if tickets[0].car_number == tickets[1].car_number == tickets[2].car_number == tickets[3].car_number:
+            cabin_no = tickets[0].car_number
+            for row_index in range(10):
+                for col_index in range(2):
+                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index+4]
+                    if self.__check_have_seats(first_seat):
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+2] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+3] = 0
+                        for revise_no, ticket in enumerate(tickets):
+                            ticket.seat_number = (row_index * 5) + (col_index + revise_no)
+                        return
 
-    Returns:
-        List[TicketInfo]: fully ticket info with row no and col no.
-    """
-    global seat_list_list
-    for row_index in range(10):
-        for col_index in range(2):
-            first_seat = seat_list_list[row_index][col_index: col_index+4]
-            if check_have_seats(first_seat):
-                seat_list_list[row_index][col_index] = 0
-                seat_list_list[row_index][col_index+1] = 0
-                seat_list_list[row_index][col_index+2] = 0
-                seat_list_list[row_index][col_index+3] = 0
-
-                result_ticket_list = []
-                for revise_no, ticket in enumerate(tickets):
-                    ticket.row_no = row_index
-                    ticket.col_no = col_index+revise_no
-                    result_ticket_list.append(ticket)
-
-                return result_ticket_list
-
-    return two_ticket_level_random_seat_strategy(tickets[:2]) + two_ticket_level_random_seat_strategy(tickets[2:])
+        self.two_ticket_level_random_seat_strategy(tickets[:2])
+        self.two_ticket_level_random_seat_strategy(tickets[2:])
 

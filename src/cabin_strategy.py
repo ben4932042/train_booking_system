@@ -1,6 +1,6 @@
 from typing import List
 
-from src.model.ticket import TicketInfo
+from src.model.ticket_info import TicketInfo
 from src.model.cabin_info import *
 
 class CabinStrategy:

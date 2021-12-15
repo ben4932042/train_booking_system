@@ -1,7 +1,7 @@
 import pytest
 
 from src.model.cabin_info import *
-from src.model.ticket import TicketInfo
+from src.model.ticket_info import TicketInfo
 from src.cabin_strategy import CabinStrategy
 
 def test_business_cabin_strategy():

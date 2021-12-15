@@ -14,8 +14,8 @@ class TicketInfo:
         range: 1 - 10
     """
     car_number: int = None
-    row_no: int = None
-    col_no: int = None
+    seat_number: int = None
+    
     def vertify(self):
         # vertify seat info
         if self.car_number not in range(10):
