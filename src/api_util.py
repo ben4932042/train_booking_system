@@ -2,7 +2,13 @@ import requests
 from typing import List
 from src.model.order_info import OrderInfo
 
-class StatusError(Exception):
+class ResultError(Exception):
+    pass
+
+class PageError(Exception):
+    pass
+
+class ParamsError(Exception):
     pass
 
 
@@ -15,8 +21,12 @@ class APIUtil:
         self.cabin_available_seat_number_route = config.CABIN_AVAILABLE_SEAT_NUMBER_ROUTE
         
     def check_http_status_code(self, response, route):
-        if response.status_code not in [200, 201]:
-            raise StatusError(f'Invalid api request. route: {route}. Error message: {response.text}')
+        if response.status_code == 204:
+            raise ResultError(f'Request success but result error. route: {route}. Error message: {response.text}')
+        elif response.status_code == 404:
+            raise PageError(f'Invalid api request. route: {route}. Error message: {response.text}')
+        elif response.status_code == 422:
+            raise ParamsError(f'Api request params error. route: {route}. Error message: {response.text}')
             
     def get_order_info(self) -> OrderInfo:
         response = requests.get(self.api_url + self.order_route)
