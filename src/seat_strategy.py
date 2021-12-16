@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import List
 
 from src.model.ticket_info import TicketInfo
 from src.model.cabin_info import *
@@ -56,7 +56,7 @@ class SeatStrategy:
 
         return return_cabin_seat_dict
 
-    def __get_prefer_seat_strategy(self, seat_prefer: int, tickets_number: int) -> object:
+    def __get_prefer_seat_strategy(self, seat_prefer: int, tickets_number: int):
         """[summary]
 
         Args:

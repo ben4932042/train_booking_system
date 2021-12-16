@@ -29,6 +29,9 @@ class TicketInfo:
 class TicketsOrder:
     """[summary]
 
+    Arge:
+        ticket_number (int): ticket number from order info
+
     Raises:
         ValueError: lost user id  or too many tickets.
         TypeError: invalid ticket object type.

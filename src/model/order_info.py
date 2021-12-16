@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from model.ticket_info import TicketsOrder
+from src.model.ticket_info import TicketsOrder
 
 
 @dataclass

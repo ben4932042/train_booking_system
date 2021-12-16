@@ -18,18 +18,18 @@ class APIUtil:
         if response.status_code not in [200, 201]:
             raise StatusError(f'Invalid api request. route: {route}. Error message: {response.text}')
             
-    def get_order_info(self, **kwargs: dict) -> OrderInfo:
-        response = requests.get(self.api_url + self.order_route, params=kwargs)
+    def get_order_info(self) -> OrderInfo:
+        response = requests.get(self.api_url + self.order_route)
         self.check_http_status_code(response, self.order_route)
         return OrderInfo(**response.json())
     
-    def get_available_seat_no_dict(self, **kwargs: dict) -> dict:
-        response = requests.get(self.api_url + self.cabin_available_seat_no_route, params=kwargs)
+    def get_available_seat_no_dict(self) -> dict:
+        response = requests.get(self.api_url + self.cabin_available_seat_no_route)
         self.check_http_status_code(response, self.cabin_available_seat_no_route)
         return response.json()
     
-    def get_cabin_available_seat_number_dict(self, **kwargs: dict) -> dict:
-        response = requests.get(self.api_url + self.cabin_available_seat_number_route, params=kwargs)
+    def get_cabin_available_seat_number_dict(self) -> dict:
+        response = requests.get(self.api_url + self.cabin_available_seat_number_route)
         self.check_http_status_code(response, self.cabin_available_seat_number_route)
         return response.json()
     

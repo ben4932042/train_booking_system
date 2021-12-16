@@ -29,7 +29,7 @@ class CabinStrategy:
         else:
             cabin_no_list = EconomyCabin.cabin_no_list
             cabin_strategy = self.business_cabin_strategy
-            
+
         cabin_strategy(self.__get_cabin_dict_with_car_type(cabin_no_list, number_of_seats_dict))
 
     def business_cabin_strategy(self, number_of_seats_dict: dict) -> None:
@@ -42,7 +42,6 @@ class CabinStrategy:
             None
 
         """
-
         self.__check_available_number_of_seat(sum(number_of_seats_dict.values()))
         self.__check_number_of_tickets_and_seats(len(self.tickets), sum(number_of_seats_dict.values()))
 
