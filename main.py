@@ -12,7 +12,6 @@ if __name__ == "__main__":
     )
 
     api_util = APIUtil(config.api_util_setting)
-    order_info = api_util.get_order_info()
 
     while True:
         try:
