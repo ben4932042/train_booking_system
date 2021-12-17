@@ -1,5 +1,6 @@
-from src.api_util import APIUtil, ResultError, PageError, ParamsError
+from src.api_util import APIUtil
 from src.ticket_service import TicketService
+from src.exception import *
 
 import logging
 import config
@@ -28,6 +29,8 @@ if __name__ == "__main__":
             raise ConnectionRefusedError from err_msg
         except ResultError as err_msg:
             logging.info(f"{err_msg}")
+        except SeatError as err_msg:
+            logging.error(f"{err_msg}")
         except PageError as err_msg:
             logging.warning(f"{err_msg}")
             raise

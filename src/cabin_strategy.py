@@ -1,8 +1,7 @@
 from typing import List
-
 from src.model.ticket_info import TicketInfo
 from src.model.cabin_info import *
-
+from src.exception import SeatError
 
 class CabinStrategy:
     def __init__(self, car_type: int, tickets: List[TicketInfo], number_of_seats_dict: dict) -> None:
@@ -89,14 +88,14 @@ class CabinStrategy:
             number_of_seat (int): number of seat.
 
         Raises:
-            Exception: all seat are booked.
+            SeatError: all seat are booked.
 
         Returns:
             None
 
         """
         if number_of_seat == 0:
-            raise Exception("All seat are booked.")
+            raise SeatError("All seat are booked.")
 
     def __check_number_of_tickets_and_seats(self, number_of_ticket: int, number_of_seat: int) -> None:
         """[summary]
@@ -106,7 +105,7 @@ class CabinStrategy:
             number_of_ticket (int): number of ticket.
 
         Raises:
-            Exception: No seat availble.
+            SeatError: No seat availble.
 
         Returns:
             None
@@ -114,7 +113,7 @@ class CabinStrategy:
         """
 
         if number_of_seat < number_of_ticket:
-            raise Exception("No seat availble.")
+            raise SeatError("No seat availble.")
 
     def __sorte_cabin_dict_by_number_of_seats(self, number_of_seats_dict: dict) -> dict:
         """[summary]
@@ -148,7 +147,7 @@ class CabinStrategy:
             cabin_sort_key_list (list): cabin no list with car type sort by number of seats.
 
          Raises:
-            Exception: Unknown logic error happened.
+            SeatError: Unknown logic error happened.
 
         Returns:
             None
@@ -159,7 +158,7 @@ class CabinStrategy:
             if cabin_sort_dict[cabin_no] == 0:
                 cabin_no = cabin_sort_key_list.pop(0)
             if cabin_sort_dict[cabin_no] == 0:
-                raise Exception("Unknown logic error happened.")
+                raise SeatError("Unknown logic error happened.")
             else:
                 ticket.car_number = int(cabin_no[4:])
                 cabin_sort_dict[cabin_no] -= 1

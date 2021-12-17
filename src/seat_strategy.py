@@ -1,7 +1,7 @@
 from typing import List
-
 from src.model.ticket_info import TicketInfo
 from src.model.cabin_info import *
+from src.exception import SeatError
 
 
 class SeatStrategy:
@@ -108,7 +108,7 @@ class SeatStrategy:
             tickets (List[TicketInfo]): ticket info with car no.
 
         Raises:
-            Exception: No seat availble.
+            SeatError: No seat availble.
 
         Returns:
             None
