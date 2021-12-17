@@ -47,7 +47,7 @@ class CabinStrategy:
 
         cabin_sort_index_dict = self.__sorte_cabin_dict_by_number_of_seats(number_of_seats_dict)
         cabin_sort_index_key_list = self.__get_cabin_no_list(cabin_sort_index_dict)
-        
+
         self.__get_tickets_cabin_no(cabin_sort_index_dict, cabin_sort_index_key_list)
 
     def economy_cabin_strategy(self, number_of_seats_dict: dict) -> None:
@@ -66,7 +66,7 @@ class CabinStrategy:
 
         cabin_sort_dict = self.__sorte_cabin_dict_by_number_of_seats(number_of_seats_dict)
         cabin_sort_key_list = self.__get_cabin_no_list(cabin_sort_dict)
-        
+
         self.__get_tickets_cabin_no(cabin_sort_dict, cabin_sort_key_list)
 
     def __get_cabin_dict_with_car_type(self, cabin_no_list: list, number_of_seats_dict: dict) -> dict:
@@ -163,4 +163,3 @@ class CabinStrategy:
             else:
                 ticket.car_number = int(cabin_no[4:])
                 cabin_sort_dict[cabin_no] -= 1
-        

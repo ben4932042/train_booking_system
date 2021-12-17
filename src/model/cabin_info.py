@@ -24,4 +24,3 @@ class EconomyCabin:
     cabin_no_list (list): cabin no list of economy cabin
     """
     cabin_no_list: list = [3, 4, 5, 6, 7, 8, 9]
-    

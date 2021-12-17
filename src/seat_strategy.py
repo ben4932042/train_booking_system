@@ -99,8 +99,8 @@ class SeatStrategy:
         if sum(seat_list) != len(seat_list):
             check = False
         return check
-        
-    #one ticket
+
+    # one ticket
     def one_ticket_level_random_seat_strategy(self, tickets: List[TicketInfo]) -> None:
         """[summary]
 
@@ -208,10 +208,10 @@ class SeatStrategy:
             cabin_no = tickets[0].car_number
             for col_index in [0, 3]:
                 for row_index in range(10):
-                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index+2]
+                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index + 2]
                     if self.__check_have_seats(first_seat):
                         self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 1] = 0
                         for revise_no, ticket in enumerate(tickets):
                             ticket.seat_number = (row_index * 5) + (col_index + revise_no)
                         return
@@ -238,7 +238,7 @@ class SeatStrategy:
                         break
                     if self.__check_have_seats(first_seat):
                         self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 1] = 0
                         for revise_no, ticket in enumerate(tickets):
                             ticket.seat_number = (row_index * 5) + (col_index + revise_no)
                         return
@@ -263,8 +263,8 @@ class SeatStrategy:
                         break
                     if self.__check_have_seats(first_seat):
                         self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+2] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 1] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 2] = 0
                         for revise_no, ticket in enumerate(tickets):
                             ticket.seat_number = (row_index * 5) + (col_index + revise_no)
                         return
@@ -286,16 +286,15 @@ class SeatStrategy:
             cabin_no = tickets[0].car_number
             for row_index in range(10):
                 for col_index in range(2):
-                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index+4]
+                    first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index: col_index + 4]
                     if self.__check_have_seats(first_seat):
                         self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+1] = 0
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+2] = 0
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index+3] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 1] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 2] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 3] = 0
                         for revise_no, ticket in enumerate(tickets):
                             ticket.seat_number = (row_index * 5) + (col_index + revise_no)
                         return
 
         self.two_ticket_level_random_seat_strategy(tickets[:2])
         self.two_ticket_level_random_seat_strategy(tickets[2:])
-
