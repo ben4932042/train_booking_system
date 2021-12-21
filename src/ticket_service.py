@@ -1,7 +1,7 @@
 from src.model.order_info import OrderInfo
 from src.model.ticket_info import TicketsOrder, TicketInfo
 from src.cabin_strategy import CabinStrategy
-from src.seat_strategy import SeatStrategy
+from src.seat_strategy_factory.seat_strategy_factory import SeatStrategyFactory
 
 
 class TicketService:
@@ -9,7 +9,7 @@ class TicketService:
         self.ticket_order = TicketsOrder(uuid=order_info.uuid)
 
         if order_info.autoticket:
-            self.ticket_order.tickets = SeatStrategy(
+            self.ticket_order.tickets = SeatStrategyFactory(
                 order_info.prefer,
                 CabinStrategy(
                     order_info.car_type,
