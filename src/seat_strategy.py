@@ -1,7 +1,6 @@
 from typing import List
 from src.model.ticket_info import TicketInfo
 from src.model.cabin_info import *
-from src.exception import SeatError
 
 
 class SeatStrategy:
@@ -184,8 +183,8 @@ class SeatStrategy:
                 for col_index in range(4):
                     first_seat = self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index:col_index + 2]
                     if self.__check_have_seats(first_seat):
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = False
-                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 1] = False
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index] = 0
+                        self.cabin_seat_dict[f'car_{cabin_no}'][row_index][col_index + 1] = 0
                         for revise_no, ticket in enumerate(tickets):
                             ticket.seat_number = (row_index * 5) + (col_index + revise_no)
                         return
