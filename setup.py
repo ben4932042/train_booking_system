@@ -9,6 +9,7 @@ setup(
     packages = [
         'src',
         'src/model',
+        'src/seat_strategy_factory',
         ],
     include_package_data = True,
     platforms = "any",
