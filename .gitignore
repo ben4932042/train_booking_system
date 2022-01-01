@@ -1,4 +1,5 @@
 data
+.scannerwork
 __pycache__
 .DS_Store
 .env
