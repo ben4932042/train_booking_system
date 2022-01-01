@@ -8,7 +8,3 @@ class PageError(Exception):
 
 class ParamsError(Exception):
     pass
-
-
-class SeatError(Exception):
-    pass

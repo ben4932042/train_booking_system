@@ -1,8 +1,10 @@
 from src.model.order_info import OrderInfo
 from src.model.ticket_info import TicketsOrder, TicketInfo
 from src.cabin_strategy import CabinStrategy
+
 from src.exception import SeatError
 from src.seat_strategy_factory.seat_strategy_factory import SeatStrategyFactory
+
 
 class TicketService:
     def __init__(self, order_info: OrderInfo, number_of_seats_dict: dict, cabin_seat_dict: dict):
@@ -30,4 +32,4 @@ class TicketService:
     def __check_seat_status(self, chosen_seats_list: list, cabin_seat_dict: dict):
         for ticket in chosen_seats_list:
             if ticket['seat_no'] not in cabin_seat_dict[f"car_{ticket['car_no']}"]:
-                raise SeatError(f'Not available seats for chosen seats list')
+                raise Exception(f'Not available seats for chosen seats list')
